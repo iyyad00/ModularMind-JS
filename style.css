@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModularMind JS</title>
+    <style>
+        /* --- MON STYLE SIGNATURE (DARK THEME) --- */
+        :root {
+            --bg-main: #131314;       /* Noir profond */
+            --bg-sidebar: #1e1f20;    /* Gris foncé */
+            --bg-msg-ia: #1e1f20;     /* Fond message IA */
+            --text-main: #e3e3e3;     /* Texte blanc cassé */
+            --accent: #8ab4f8;        /* Bleu clair doux */
+            --user-bubble: #2b2c2f;   /* Bulle utilisateur */
+            --border: #444746;        /* Bordures subtiles */
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* --- ZONE DE CHAT --- */
+        #chat-window {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+            line-height: 1.6;
+            font-size: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Style Bulle IA */
+        .ia-msg {
+            align-self: flex-start;
+            background-color: transparent;
+        }
+
+        /* Style Bulle Utilisateur */
+        .user-msg {
+            align-self: flex-end;
+            background-color: var(--user-bubble);
+            padding: 12px 20px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+        }
+
+        /* --- BOUTONS --- */
+        .btn-group {
+            margin-top: 15px;
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: rgba(138, 180, 248, 0.1);
+            border-color: var(--accent);
+        }
+
+        button.confirm {
+            background: var(--accent);
+            color: #000;
+            border: none;
+        }
+
+        /* --- ZONE DE SAISIE --- */
+        #input-area {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: var(--bg-main);
+            position: sticky;
+            bottom: 0;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            display: flex;
+            background: var(--bg-sidebar);
+            border-radius: 28px;
+            padding: 10px 20px;
+            border: 1px solid transparent;
+            transition: border 0.3s;
+        }
+
+        .input-wrapper:focus-within {
+            border: 1px solid var(--border);
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            font-size: 16px;
+        }
+
+        #send-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 18px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chat-window">
+    <div class="message ia-msg">
+        <b>ModularMind</b><br>
+        Bonjour. Je suis prêt à vous aider à fabriquer vos projets. Que voulez-vous faire ?
+    </div>
+</div>
+
+<div id="input-area">
+    <div class="input-wrapper">
+        <input type="text" id="user-input" placeholder="Entrez une demande ici..." onkeypress="if(event.key === 'Enter') gererEnvoi()">
+        <button id="send-btn" onclick="gererEnvoi()">➤</button>
+    </div>
+</div>
+
+<script>
+    // Ici on garde ta logique d'orchestrateur (version propre)
+    // Elle sera connectée à ce beau design.
+    const chatWindow = document.getElementById('chat-window');
+
+    function afficherMessage(texte, type) {
+        const div = document.createElement('div');
+        div.className = `message ${type === 'user' ? 'user-msg' : 'ia-msg'}`;
+        
+        const label = type === 'user' ? '' : '<b>ModularMind</b><br>';
+        div.innerHTML = label + texte;
+        
+        chatWindow.appendChild(div);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function gererEnvoi() {
+        const input = document.getElementById('user-input');
+        const texte = input.value.trim();
+        if (!texte) return;
+
+        afficherMessage(texte, 'user');
+        input.value = '';
+
+        // Simulation de l'IA pour tester le style
+        setTimeout(() => {
+            afficherMessage("J'ai bien reçu votre demande. Analyse en cours...", 'ia');
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
